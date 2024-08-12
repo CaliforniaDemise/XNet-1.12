@@ -161,7 +161,7 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
         ConnectedBlockClientInfo c = fromServer_connectedBlocks.get(index);
         if (c != null) {
             XNet.instance.clientInfo.hilightBlock(c.getPos().getPos(), System.currentTimeMillis() + 1000 * 5);
-            Logging.message(mc.player, "The block is now highlighted");
+            Logging.message(mc.player, I18n.format(XNet.MODID + ".controller.block_highlight"));
             mc.player.closeScreen();
         }
     }
@@ -221,14 +221,14 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
                 if (getSelectedChannel() != -1) {
                     copyConnector();
                 } else {
-                    showMessage(mc, this, getWindowManager(), 50, 50, TextFormatting.RED + "Nothing selected!");
+                    showMessage(mc, this, getWindowManager(), 50, 50, I18n.format(XNet.MODID + ".controller.clipboard_nothing"));
                 }
                 return true;
             } else if (keyCode == Keyboard.KEY_V) {
                 if (getSelectedChannel() != -1) {
                     pasteConnector();
                 } else {
-                    showMessage(mc, this, getWindowManager(), 50, 50, TextFormatting.RED + "Nothing selected!");
+                    showMessage(mc, this, getWindowManager(), 50, 50, I18n.format(XNet.MODID + ".controller.clipboard_nothing"));
                 }
                 return true;
             }
@@ -268,7 +268,7 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
     }
 
     private void removeChannel() {
-        showMessage(mc, this, getWindowManager(), 50, 50, TextFormatting.RED + "Really remove channel " + (getSelectedChannel() + 1) + "?", parent -> {
+        showMessage(mc, this, getWindowManager(), 50, 50, I18n.format(XNet.MODID + ".controller.remove_channel.message", getSelectedChannel() + 1), parent -> {
             sendServerCommand(XNetMessages.INSTANCE, TileEntityController.CMD_REMOVECHANNEL,
                     TypedMap.builder()
                             .put(PARAM_INDEX, getSelectedChannel())
@@ -314,32 +314,34 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
             if (channelButtons[editingChannel].isPressed()) {
                 ChannelClientInfo info = fromServer_channels.get(editingChannel);
                 if (info != null) {
+                    String copyButton = I18n.format(XNet.MODID + ".button.copy");
+
                     ChannelEditorPanel editor = new ChannelEditorPanel(channelEditPanel, mc, this, editingChannel);
-                    editor.label("Channel " + (editingChannel + 1))
+                    editor.label(I18n.format(XNet.MODID + ".controller.editing_channel", editingChannel + 1))
                             .shift(5)
-                            .toggle(TAG_ENABLED, "Enable processing on this channel", info.isEnabled())
+                            .toggle(TAG_ENABLED, I18n.format(XNet.MODID + ".controller.enable_channel"), info.isEnabled())
                             .shift(5)
-                            .text(TAG_NAME, "Channel name", info.getChannelName(), 65);
+                            .text(TAG_NAME, I18n.format(XNet.MODID + ".controller.channel_name"), info.getChannelName(), 65);
                     info.getChannelSettings().createGui(editor);
 
-                    Button remove = new Button(mc, this).setText("x")
+                    Button remove = new Button(mc, this).setText(I18n.format(XNet.MODID + ".button.remove"))
                             .setTextOffset(0, -1)
-                            .setTooltips("Remove this channel")
+                            .setTooltips(I18n.format(XNet.MODID + ".controller.remove_channel"))
                             .setLayoutHint(new PositionalLayout.PositionalHint(151, 1, 9, 10))
                             .addButtonEvent(parent -> removeChannel());
                     channelEditPanel.addChild(remove);
                     editor.setState(info.getChannelSettings());
 
                     Button copyChannel = new Button(mc, this)
-                            .setText("C")
-                            .setTooltips("Copy this channel to", "the clipboard")
+                            .setText(copyButton)
+                            .setTooltips(I18n.format(XNet.MODID + ".controller.copy_channel"))
                             .setLayoutHint(new PositionalLayout.PositionalHint(134, 19, 25, 14))
                             .addButtonEvent(parent -> copyChannel());
                     channelEditPanel.addChild(copyChannel);
 
                     copyConnector = new Button(mc, this)
-                            .setText("C")
-                            .setTooltips("Copy this connector", "to the clipboard")
+                            .setText(copyButton)
+                            .setTooltips(I18n.format(XNet.MODID + ".controller.copy_connector"))
                             .setLayoutHint(new PositionalLayout.PositionalHint(114, 19, 25, 14))
                             .addButtonEvent(parent -> copyConnector());
                     channelEditPanel.addChild(copyConnector);
@@ -351,13 +353,13 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
                         type.addChoices(channelType.getID());       // Show names?
                     }
                     Button create = new Button(mc, this)
-                            .setText("Create")
+                            .setText(I18n.format(XNet.MODID + "button.create"))
                             .setLayoutHint(new PositionalLayout.PositionalHint(100, 3, 53, 14))
                             .addButtonEvent(parent -> createChannel(type.getCurrentChoice()));
 
                     Button paste = new Button(mc, this)
-                            .setText("Paste")
-                            .setTooltips("Create a new channel", "from the clipboard")
+                            .setText(I18n.format(XNet.MODID + ".button.paste"))
+                            .setTooltips(I18n.format(XNet.MODID + "controller.paste_channel"))
                             .setLayoutHint(new PositionalLayout.PositionalHint(100, 17, 53, 14))
                             .addButtonEvent(parent -> pasteChannel());
 
@@ -384,15 +386,15 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
         ask.addChild(new Label(mc, gui).setText(title));
         Panel buttons = new Panel(mc, gui).setLayout(new HorizontalLayout()).setDesiredWidth(100).setDesiredHeight(18);
         if (okEvent != null) {
-            buttons.addChild(new Button(mc, gui).setText("Cancel").addButtonEvent((parent -> {
+            buttons.addChild(new Button(mc, gui).setText(I18n.format(XNet.MODID + ".button.cancel")).addButtonEvent((parent -> {
                 windowManager.closeWindow(askWindow);
             })));
-            buttons.addChild(new Button(mc, gui).setText("OK").addButtonEvent(parent -> {
+            buttons.addChild(new Button(mc, gui).setText(I18n.format(XNet.MODID + ".button.ok")).addButtonEvent(parent -> {
                 windowManager.closeWindow(askWindow);
                 okEvent.buttonClicked(parent);
             }));
         } else {
-            buttons.addChild(new Button(mc, gui).setText("OK").addButtonEvent((parent -> {
+            buttons.addChild(new Button(mc, gui).setText(I18n.format(XNet.MODID + ".button.ok")).addButtonEvent((parent -> {
                 windowManager.closeWindow(askWindow);
             })));
         }
@@ -412,7 +414,7 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
 
 
     private void copyChannel() {
-        showMessage(mc, this, getWindowManager(), 50, 50, TextFormatting.GREEN + "Copied channel");
+        showMessage(mc, this, getWindowManager(), 50, 50, I18n.format(XNet.MODID + ".controller.copy_channel.message"));
         sendServerCommand(XNetMessages.INSTANCE, TileEntityController.CMD_COPYCHANNEL,
                 TypedMap.builder()
                         .put(PARAM_INDEX, getSelectedChannel())
@@ -422,7 +424,7 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
     public static void showError(String error) {
         if (openController != null) {
             Minecraft mc = Minecraft.getMinecraft();
-            showMessage(mc, openController, openController.getWindowManager(), 50, 50, TextFormatting.RED + error);
+            showMessage(mc, openController, openController.getWindowManager(), 50, 50, error);
         }
     }
 
@@ -432,7 +434,7 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
         } catch (Exception e) {
-            showError("Error copying to clipboard!");
+            showError(I18n.format(XNet.MODID + ".controller.copy.error.general"));
         }
     }
 
@@ -441,7 +443,7 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             String json = (String) clipboard.getData(DataFlavor.stringFlavor);
             if (json.length() > 26000) {
-                showMessage(mc, this, getWindowManager(), 50, 50, TextFormatting.RED + "Clipboard too large!");
+                showMessage(mc, this, getWindowManager(), 50, 50, I18n.format(XNet.MODID + ".controller.paste.error.large"));
                 return;
             }
             JsonParser parser = new JsonParser();
@@ -449,7 +451,7 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
             String type = root.get("type").getAsString();
             IChannelType channelType = XNet.xNetApi.findType(type);
             if (channelType == null) {
-                showMessage(mc, this, getWindowManager(), 50, 50, TextFormatting.RED + "Unsupported channel type: " + type + "!");
+                showMessage(mc, this, getWindowManager(), 50, 50, I18n.format(XNet.MODID + ".controller.paste.error.unsupported", type));
                 return;
             }
             sendServerCommand(XNetMessages.INSTANCE, TileEntityController.CMD_PASTECONNECTOR,
@@ -466,9 +468,9 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
             }
             refresh();
         } catch (UnsupportedFlavorException e) {
-            showMessage(mc, this, getWindowManager(), 50, 50, TextFormatting.RED + "Clipboard does not contain connector!");
+            showMessage(mc, this, getWindowManager(), 50, 50, I18n.format(XNet.MODID + ".connector.paste.error.no_connector"));
         } catch (Exception e) {
-            showMessage(mc, this, getWindowManager(), 50, 50, TextFormatting.RED + "Error reading from clipboard!");
+            showMessage(mc, this, getWindowManager(), 50, 50, I18n.format(XNet.MODID + ".controller.paste.error.general"));
         }
     }
 
@@ -477,7 +479,7 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             String json = (String) clipboard.getData(DataFlavor.stringFlavor);
             if (json.length() > 26000) {
-                showMessage(mc, this, getWindowManager(), 50, 50, TextFormatting.RED + "Clipboard too large!");
+                showMessage(mc, this, getWindowManager(), 50, 50, I18n.format(XNet.MODID + ".controller.paste.error.large"));
                 return;
             }
             JsonParser parser = new JsonParser();
@@ -485,7 +487,7 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
             String type = root.get("type").getAsString();
             IChannelType channelType = XNet.xNetApi.findType(type);
             if (channelType == null) {
-                showMessage(mc, this, getWindowManager(), 50, 50, TextFormatting.RED + "Unsupported channel type: " + type + "!");
+                showMessage(mc, this, getWindowManager(), 50, 50, I18n.format(XNet.MODID + ".controller.paste.error.unsupported", type));
                 return;
             }
             sendServerCommand(XNetMessages.INSTANCE, TileEntityController.CMD_PASTECHANNEL,
@@ -495,9 +497,9 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
                             .build());
             refresh();
         } catch (UnsupportedFlavorException e) {
-            showMessage(mc, this, getWindowManager(), 50, 50, TextFormatting.RED + "Clipboard does not contain channel!");
+            showMessage(mc, this, getWindowManager(), 50, 50, I18n.format(XNet.MODID + ".connector.paste.error.no_channel"));
         } catch (Exception e) {
-            showMessage(mc, this, getWindowManager(), 50, 50, TextFormatting.RED + "Error reading from clipboard!");
+            showMessage(mc, this, getWindowManager(), 50, 50, I18n.format(XNet.MODID + ".controller.paste.error.general"));
         }
     }
 
@@ -525,9 +527,9 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
                     SidedConsumer sidedConsumer = new SidedConsumer(clientInfo.getConsumerId(), side.getOpposite());
                     ConnectorClientInfo connectorInfo = info.getConnectors().get(sidedConsumer);
 
-                    Button remove = new Button(mc, this).setText("x")
+                    Button remove = new Button(mc, this).setText(I18n.format(XNet.MODID + ".button.remove"))
                             .setTextOffset(0, -1)
-                            .setTooltips("Remove this connector")
+                            .setTooltips(I18n.format(XNet.MODID + ".controller.remove_connector"))
                             .setLayoutHint(new PositionalLayout.PositionalHint(151, 1, 9, 10))
                             .addButtonEvent(parent -> removeConnector(editingConnector));
 
@@ -538,14 +540,14 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
                     editor.setState(connectorInfo.getConnectorSettings());
                 } else {
                     Button create = new Button(mc, this)
-                            .setText("Create")
+                            .setText(I18n.format(XNet.MODID + ".button.create"))
                             .setLayoutHint(new PositionalLayout.PositionalHint(85, 20, 60, 14))
                             .addButtonEvent(parent -> createConnector(editingConnector));
                     connectorEditPanel.addChild(create);
 
                     Button paste = new Button(mc, this)
-                            .setText("Paste")
-                            .setTooltips("Create a new connector", "from the clipboard")
+                            .setText(I18n.format(XNet.MODID + ".button.paste"))
+                            .setTooltips(I18n.format(XNet.MODID + ".controller.paste_connector"))
                             .setLayoutHint(new PositionalLayout.PositionalHint(85, 40, 60, 14))
                             .addButtonEvent(parent -> pasteConnector());
                     connectorEditPanel.addChild(paste);
@@ -624,14 +626,14 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
             br.setUserObject("block");
             panel.addChild(br);
             if (!name.isEmpty()) {
-                br.setTooltips(TextFormatting.GREEN + "Connector: " + TextFormatting.WHITE + name,
-                        TextFormatting.GREEN + "Block: " + TextFormatting.WHITE + blockName,
-                        TextFormatting.GREEN + "Position: " + TextFormatting.WHITE + BlockPosTools.toString(coordinate),
-                        TextFormatting.WHITE + "(doubleclick to highlight)");
+                br.setTooltips(I18n.format(XNet.MODID + ".controller.connector.name", name),
+                        I18n.format(XNet.MODID + ".controller.connector.block", blockName),
+                        I18n.format(XNet.MODID + ".controller.connector.position", BlockPosTools.toString(coordinate)),
+                        I18n.format(XNet.MODID + ".controller.connector.message"));
             } else {
-                br.setTooltips(TextFormatting.GREEN + "Block: " + TextFormatting.WHITE + blockName,
-                        TextFormatting.GREEN + "Position: " + TextFormatting.WHITE + BlockPosTools.toString(coordinate),
-                        TextFormatting.WHITE + "(doubleclick to highlight)");
+                br.setTooltips(I18n.format(XNet.MODID + ".controller.connector.block", blockName),
+                        I18n.format(XNet.MODID + ".controller.connector.position", BlockPosTools.toString(coordinate)),
+                        I18n.format(XNet.MODID + ".controller.connector.message"));
             }
 
             panel.addChild(new Label(mc, this).setText(sidedPos.getSide().getName().substring(0, 1).toUpperCase()).setColor(color).setDesiredWidth(18));
@@ -646,7 +648,7 @@ public class GuiController extends GenericGuiContainer<TileEntityController> {
                             but.setImage(icon.getImage(), icon.getU(), icon.getV(), icon.getIw(), icon.getIh());
                         }
                         String indicator = clientInfo.getConnectorSettings().getIndicator();
-                        but.setText(indicator != null ? indicator : "");
+                        if (indicator != null) but.setText(indicator);
                     }
                 }
                 int finalI = i;

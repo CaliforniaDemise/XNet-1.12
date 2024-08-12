@@ -15,6 +15,7 @@ import mcjty.xnet.setup.GuiProxy;
 import mcjty.xnet.network.PacketGetLocalChannelsRouter;
 import mcjty.xnet.network.PacketGetRemoteChannelsRouter;
 import mcjty.xnet.network.XNetMessages;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
@@ -130,12 +131,12 @@ public class GuiRouter extends GenericGuiContainer<TileEntityRouter> {
         }
 
         Panel panel2 = new Panel(mc, this).setLayout(new HorizontalLayout().setHorizontalMargin(0).setSpacing(0)).setLayoutHint(new PositionalLayout.PositionalHint(0, 13, 160, 13));
-        panel2.addChild(new Label(mc, this).setText("Pos").setColor(labelColor));
+        panel2.addChild(new Label(mc, this).setText(I18n.format(XNet.MODID + ".router.position")).setColor(labelColor));
         panel2.addChild(new Label(mc, this).setText(BlockPosTools.toString(controllerPos)));
 
         Panel panel3 = new Panel(mc, this).setLayout(new HorizontalLayout().setHorizontalMargin(0).setSpacing(0)).setLayoutHint(new PositionalLayout.PositionalHint(0, 26, 160, 13));
-        panel3.addChild(new Label(mc, this).setText("Index").setColor(labelColor));
-        panel3.addChild(new Label(mc, this).setText(index + " (" + type.getName() + ")"));
+        panel3.addChild(new Label(mc, this).setText(I18n.format(XNet.MODID + ".router.index")).setColor(labelColor));
+        panel3.addChild(new Label(mc, this).setText(I18n.format(XNet.MODID + ".router.index_type", index, I18n.format(type.getID()))));
 
         panel.addChild(panel1).addChild(panel2).addChild(panel3);
         return panel;

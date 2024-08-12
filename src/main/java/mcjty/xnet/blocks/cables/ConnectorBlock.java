@@ -29,6 +29,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -400,18 +401,19 @@ public class ConnectorBlock extends GenericCableBlock implements ITileEntityProv
         super.addInformation(stack, player, tooltip, adv);
 
         if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-            tooltip.add(TextFormatting.BLUE + "Place connector next to block or");
-            tooltip.add(TextFormatting.BLUE + "machine that should be connected");
-            tooltip.add(TextFormatting.BLUE + "to the network");
+            tooltip.add(I18n.format("tile." + XNet.MODID + ".connector_block"));
+
             boolean advanced = this == NetCableSetup.advancedConnectorBlock;
             int maxrf = advanced ? ConfigSetup.maxRfAdvancedConnector.get() : ConfigSetup.maxRfConnector.get();
-            tooltip.add(TextFormatting.GRAY + "" + TextFormatting.BOLD + "Max RF: " + TextFormatting.WHITE + maxrf);
+
+            tooltip.add(I18n.format("tile." + XNet.MODID + ".connector_block.max_rf", maxrf));
+
             if (advanced) {
-                tooltip.add(TextFormatting.GRAY + "Allow access to different sides");
-                tooltip.add(TextFormatting.GRAY + "Supports faster item transfer");
+                tooltip.add(I18n.format("tile." + XNet.MODID + ".connector_block.advanced"));
             }
+
         } else {
-            tooltip.add(TextFormatting.WHITE + GuiProxy.SHIFT_MESSAGE);
+            tooltip.add(I18n.format("message." + XNet.MODID + ".shiftmessage"));
         }
 
     }

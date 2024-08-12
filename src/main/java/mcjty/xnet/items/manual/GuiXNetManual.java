@@ -8,7 +8,11 @@ import mcjty.lib.gui.widgets.Label;
 import mcjty.lib.gui.widgets.Panel;
 import mcjty.lib.gui.widgets.*;
 import mcjty.xnet.XNet;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.Language;
+import net.minecraft.client.resources.LanguageManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
@@ -34,12 +38,20 @@ public class GuiXNetManual extends GuiScreen {
     // If this is set when the manual opens the given page will be located.
     public static String locatePage = null;
 
-    private static final ResourceLocation manualXNetText = new ResourceLocation(XNet.MODID, "text/manual_xnet.txt");
     private static final ResourceLocation iconGuiElements = new ResourceLocation(XNet.MODID, "textures/gui/guielements.png");
 
     public GuiXNetManual(int manual) {
         if (manual == MANUAL_XNET) {
-            manualText = manualXNetText;
+            manualText = getManualText(manual);
+        }
+    }
+
+    private static ResourceLocation getManualText(int manual) {
+        Language language = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage();
+
+        if (language.getLanguageCode().equals("en_us")) return new ResourceLocation(XNet.MODID, "text/manual_xnet.txt");
+        else {
+            return new ResourceLocation(XNet.MODID, "text/manual_xnet." + language.getLanguageCode() + ".txt");
         }
     }
 

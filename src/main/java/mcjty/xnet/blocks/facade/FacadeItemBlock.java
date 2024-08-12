@@ -1,5 +1,6 @@
 package mcjty.xnet.blocks.facade;
 
+import mcjty.xnet.XNet;
 import mcjty.xnet.blocks.cables.ConnectorTileEntity;
 import mcjty.xnet.blocks.cables.NetCableSetup;
 import mcjty.xnet.blocks.generic.GenericCableBlock;
@@ -7,6 +8,7 @@ import mcjty.xnet.init.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -115,8 +117,7 @@ public class FacadeItemBlock extends ItemBlock {
         super.addInformation(stack, null, tooltip, advanced);
         NBTTagCompound tagCompound = stack.getTagCompound();
         if (tagCompound == null || !tagCompound.hasKey("regName")) {
-            tooltip.add(TextFormatting.BLUE + "Right or sneak-right click on block to mimic");
-            tooltip.add(TextFormatting.BLUE + "Right or sneak-right click on cable/connector to hide");
+            tooltip.add(I18n.format(this.block.getTranslationKey() + ".empty.tooltip"));
         } else {
             String regName = tagCompound.getString("regName");
             int meta = tagCompound.getInteger("meta");
@@ -124,7 +125,7 @@ public class FacadeItemBlock extends ItemBlock {
             if (value != null) {
                 ItemStack s = new ItemStack(value, 1, meta);
                 if (s.getItem() != null) {
-                    tooltip.add(TextFormatting.BLUE + "Mimicing " + s.getDisplayName());
+                    tooltip.add(I18n.format(this.block.getTranslationKey() + ".tooltip", s.getDisplayName()));
                 }
             }
         }

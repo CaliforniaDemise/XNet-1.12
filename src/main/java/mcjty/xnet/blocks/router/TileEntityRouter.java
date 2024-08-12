@@ -367,25 +367,25 @@ public final class TileEntityRouter extends GenericTileEntity {
         WorldBlob worldBlob = blobData.getWorldBlob(world);
         Set<NetworkId> networks = worldBlob.getNetworksAt(data.getPos());
         for (NetworkId networkId : networks) {
-            probeInfo.text(TextStyleClass.LABEL + "Network: " + TextStyleClass.INFO + networkId.getId());
+            probeInfo.text(TextStyleClass.LABEL + "{*xnet.top.router.network*} " + TextStyleClass.INFO + networkId.getId());
             if (mode != ProbeMode.EXTENDED) {
                 break;
             }
         }
         if (inError()) {
-            probeInfo.text(TextStyleClass.ERROR + "Too many channels on router!");
+            probeInfo.text(TextStyleClass.ERROR + "{*xnet.top.router.too_many_channels*}");
         } else {
-            probeInfo.text(TextStyleClass.LABEL + "Channels: " + TextStyleClass.INFO + getChannelCount());
+            probeInfo.text(TextStyleClass.LABEL + "{*xnet.top.router.channels*} " + TextStyleClass.INFO + getChannelCount());
         }
 
         if (mode == ProbeMode.DEBUG) {
             BlobId blobId = worldBlob.getBlobAt(data.getPos());
             if (blobId != null) {
-                probeInfo.text(TextStyleClass.LABEL + "Blob: " + TextStyleClass.INFO + blobId.getId());
+                probeInfo.text(TextStyleClass.LABEL + "{*xnet.top.router.blob*} " + TextStyleClass.INFO + blobId.getId());
             }
             ColorId colorId = worldBlob.getColorAt(data.getPos());
             if (colorId != null) {
-                probeInfo.text(TextStyleClass.LABEL + "Color: " + TextStyleClass.INFO + colorId.getId());
+                probeInfo.text(TextStyleClass.LABEL + "{*xnet.top.router.color*} " + TextStyleClass.INFO + colorId.getId());
             }
         }
     }

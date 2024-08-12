@@ -337,25 +337,23 @@ public final class TileEntityWirelessRouter extends GenericEnergyReceiverTileEnt
         WorldBlob worldBlob = blobData.getWorldBlob(world);
         Set<NetworkId> networks = worldBlob.getNetworksAt(data.getPos());
         for (NetworkId networkId : networks) {
-            probeInfo.text(TextStyleClass.LABEL + "Network: " + TextStyleClass.INFO + networkId.getId());
+            probeInfo.text(TextStyleClass.LABEL + "{*xnet.top.router.network*} " + TextStyleClass.INFO + networkId.getId());
             if (mode != ProbeMode.EXTENDED) {
                 break;
             }
         }
         if (inError()) {
-            probeInfo.text(TextStyleClass.ERROR + "Missing antenna!");
-        } else {
-//            probeInfo.text(TextStyleClass.LABEL + "Channels: " + TextStyleClass.INFO + getChannelCount());
+            probeInfo.text(TextStyleClass.ERROR + "{*xnet.top.wireless_router.no_antenna*}");
         }
 
         if (mode == ProbeMode.DEBUG) {
             BlobId blobId = worldBlob.getBlobAt(data.getPos());
             if (blobId != null) {
-                probeInfo.text(TextStyleClass.LABEL + "Blob: " + TextStyleClass.INFO + blobId.getId());
+                probeInfo.text(TextStyleClass.LABEL + "{*xnet.top.router.blob*} " + TextStyleClass.INFO + blobId.getId());
             }
             ColorId colorId = worldBlob.getColorAt(data.getPos());
             if (colorId != null) {
-                probeInfo.text(TextStyleClass.LABEL + "Color: " + TextStyleClass.INFO + colorId.getId());
+                probeInfo.text(TextStyleClass.LABEL + "{*xnet.top.router.color*} " + TextStyleClass.INFO + colorId.getId());
             }
         }
     }

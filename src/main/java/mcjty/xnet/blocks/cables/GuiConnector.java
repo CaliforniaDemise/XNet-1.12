@@ -13,6 +13,7 @@ import mcjty.lib.typed.TypedMap;
 import mcjty.xnet.XNet;
 import mcjty.xnet.setup.GuiProxy;
 import mcjty.xnet.network.XNetMessages;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumFacing;
 
 import java.awt.*;
@@ -43,14 +44,14 @@ public class GuiConnector extends GenericGuiContainer<ConnectorTileEntity> {
 
         Panel toplevel = new Panel(mc, this).setFilledRectThickness(2).setLayout(new VerticalLayout());
 
-        TextField nameField = new TextField(mc, this).setName("name").setTooltips("Set the name of this connector");
+        TextField nameField = new TextField(mc, this).setName(I18n.format(XNet.MODID + ".connector.name")).setTooltips(I18n.format(XNet.MODID + ".connector.name.tooltip"));
 
         Panel namePanel = new Panel(mc, this).setLayout(new HorizontalLayout()).
-                addChild(new Label(mc, this).setText("Name:")).addChild(nameField);
+                addChild(new Label(mc, this).setText(I18n.format(XNet.MODID + ".connector.name_panel"))).addChild(nameField);
         toplevel.addChild(namePanel);
 
         Panel togglePanel = new Panel(mc, this).setLayout(new HorizontalLayout()).
-                addChild(new Label(mc, this).setText("Directions:"));
+                addChild(new Label(mc, this).setText(I18n.format(XNet.MODID + ".connector.directions_panel")));
         for (EnumFacing facing : EnumFacing.VALUES) {
             toggleButtons[facing.ordinal()] = new ToggleButton(mc, this).setText(facing.getName().substring(0, 1).toUpperCase())
                 .addButtonEvent(parent -> {

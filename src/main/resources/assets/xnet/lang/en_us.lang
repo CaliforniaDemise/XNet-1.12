@@ -2,7 +2,7 @@
 
 item.xnet.xnet_manual.name=XNet Manual
 item.xnet.connector_upgrade.name=Connector Upgrade Kit
-
+item.xnet.connector_upgrade.tooltip=§8Sneak-right click on a normal connector to upgrade it to an advanced connector
 
 tile.xnet.facade.name=Facade
 tile.xnet.facade_blue.name=Blue Facade
@@ -33,7 +33,7 @@ tile.xnet.netcable_green.name=Green Network Cable
 tile.xnet.netcable_routing.name=Routing Network Cable
 
 tile.xnet.redstone_proxy.name=Redstone Proxy
-tile.xnet.redstone_proxy_upd.name=Redstone Proxy (update)
+tile.xnet.redstone_proxy_upd.name=Updating Redstone Proxy
 
 tile.xnet.controller.name=Controller
 tile.xnet.router.name=Router
@@ -44,7 +44,84 @@ tile.xnet.antenna_dish.name=Antenna Dish
 
 itemGroup.XNet=XNet
 
-message.xnet.shiftmessage=<Press Shift>
+tile.xnet.redstone_proxy.tooltip=Acts as a proxy block for\nredstone. XNet can connect to this\n§eThis version doesn't update!
+tile.xnet.redstone_proxy_upd.tooltip=Acts as a proxy block for\nredstone. XNet can connect to this\n§eThis version does update!
+
+tile.xnet.connector_block=§8Place connector next to block or\nmachine that should be connected\nto the network
+tile.xnet.connector_block.advanced=§aAllows access to different sides\nSupports faster item transfer
+tile.xnet.connector_block.max_rf=§7§lMax RF: §f%s
+
+tile.xnet.facade.empty.tooltip=§8Right click on a block to mimic\nRight click on a cable/connector to hide
+tile.xnet.facade.tooltip=§fMimicing: §7%s
+
+message.xnet.shiftmessage=§f<Press Shift>
+
+xnet.energy=Energy
+xnet.fluid=Fluid
+xnet.item=Item
+xnet.logic=Logic
+
+xnet.button.remove=x
+xnet.button.copy=C
+xnet.button.create=Create
+xnet.button.paste=Paste
+xnet.button.cancel=Cancel
+xnet.button.ok=OK
+
+xnet.controller.block_highlight=The block is now highlighted
+xnet.controller.clipboard_nothing=§cNothing is selected!
+xnet.controller.editing_channel=Channel %i
+xnet.controller.enable_channel=Enable processing on this channel
+xnet.controller.channel_name=Channel Name
+xnet.controller.remove_channel=Remove this channel
+xnet.controller.remove_channel.message=§cRemove the channel %i?
+xnet.controller.copy_channel=Copy this channel to\nthe clipboard
+xnet.controller.copy_channel.message=§aCopied channel
+xnet.controller.paste_channel=Create a new channel\nfrom the clipboard
+
+xnet.controller.copy_connector=Copy this connector\nto the clipboard
+xnet.controller.remove_connector=Remove this connector
+xnet.controller.paste_connector=Create a new connector\nfrom the clipboard
+
+xnet.controller.copy.error.general=§cError copying to clipboard!
+
+xnet.controller.paste.error.general=§cError reading from clipboard!
+xnet.controller.paste.error.large=§cClipboard too large!
+xnet.controller.paste.error.unsupported=§cUnsupported channel type: %i!
+xnet.controller.paste.error.no_connector=§cClipboard doesn't contain a connector!
+xnet.controller.paste.error.no_channel=§cClipboard doesn't contain a channel!
+
+xnet.controller.connector.name=§aConnector: §f%s
+xnet.controller.connector.block=§aBlock: §f%s
+xnet.controller.connector.position=§aPosition: §f%s
+xnet.controller.connector.message=§f(double-click to highlight)
+
+xnet.connector.name_panel=Name:
+xnet.connector.directions_panel=Directions:
+
+xnet.connector.name=name
+xnet.connector.name.tooltip=Set the name of this connector
+
+xnet.controller.redstone.ignore=Ignored
+xnet.controller.redstone.ignore.tooltip=Redstone Mode:\nIgnored
+xnet.controller.redstone.off=Off
+xnet.controller.redstone.off.tooltip=Redstone Mode:\nOff to activate
+xnet.controller.redstone.on=On
+xnet.controller.redstone.on.tooltip=Redstone Mode:\nOn to activate
+xnet.controller.redstone.pulse=Pulse
+xnet.controller.redstone.pulse.tooltip=Do one operation\non a pulse
+
+xnet.router.position=Pos
+xnet.router.index=Index
+xnet.router.index_type=%i (%s)
+
+xnet.top.router.network=Network:
+xnet.top.router.too_many_channels=Too many channels!
+xnet.top.router.channels=Channels:
+xnet.top.router.blob=Blob:
+xnet.top.router.color=Color:
+
+xnet.top.wireless_router.no_antenna=Missing Antenna!
 
 message.xnet.router=\
     @fWith this block you can connect\n\

@@ -11,6 +11,7 @@ public interface IChannelType {
 
     String getID();
 
+    @Deprecated
     String getName();
 
     /**

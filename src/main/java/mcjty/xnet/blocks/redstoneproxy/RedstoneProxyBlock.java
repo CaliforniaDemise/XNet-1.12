@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -53,9 +54,7 @@ public class RedstoneProxyBlock extends Block {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        tooltip.add("Acts as a proxy block for");
-        tooltip.add("redstone. XNet can connect to this");
-        tooltip.add(TextFormatting.YELLOW + "This version does no block update!");
+        tooltip.add(I18n.format(this.getTranslationKey() + ".tooltip"));
     }
 
 }

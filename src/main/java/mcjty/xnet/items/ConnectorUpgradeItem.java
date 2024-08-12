@@ -48,9 +48,7 @@ public class ConnectorUpgradeItem extends Item {
     @Override
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
         super.addInformation(stack, null, tooltip, advanced);
-        tooltip.add(TextFormatting.BLUE + "Sneak right click this on a");
-        tooltip.add(TextFormatting.BLUE + "normal connector to upgrade it");
-        tooltip.add(TextFormatting.BLUE + "to an advanced connector");
+        tooltip.add(this.getTranslationKey(stack) + ".tooltip");
     }
 
     @Override
