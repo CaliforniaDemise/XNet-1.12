@@ -2,11 +2,13 @@ package mcjty.xnet.api.helper;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import mcjty.xnet.XNet;
 import mcjty.xnet.api.channels.Color;
 import mcjty.xnet.api.channels.IConnectorSettings;
 import mcjty.xnet.api.channels.RSMode;
 import mcjty.xnet.api.gui.IEditorGui;
 import mcjty.xnet.apiimpl.EnumStringTranslators;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
@@ -196,15 +198,17 @@ public abstract class AbstractConnectorSettings implements IConnectorSettings {
     }
 
     protected IEditorGui sideGui(IEditorGui gui) {
-        return gui.choices(TAG_FACING, "Side from which to operate", facingOverride == null ? side : facingOverride, EnumFacing.VALUES);
+        return gui.choices(TAG_FACING, I18n.format(XNet.MODID + ".editor.facing.tooltip"), facingOverride == null ? side : facingOverride, EnumFacing.VALUES);
     }
 
     protected IEditorGui colorsGui(IEditorGui gui) {
+        String colorTooltip = I18n.format(XNet.MODID + ".connector.color.tooltip");
+
         return gui
-                .colors(TAG_COLOR + "0", "Enable on color", colors[0].getColor(), Color.COLORS)
-                .colors(TAG_COLOR + "1", "Enable on color", colors[1].getColor(), Color.COLORS)
-                .colors(TAG_COLOR + "2", "Enable on color", colors[2].getColor(), Color.COLORS)
-                .colors(TAG_COLOR + "3", "Enable on color", colors[3].getColor(), Color.COLORS);
+                .colors(TAG_COLOR + "0", colorTooltip, colors[0].getColor(), Color.COLORS)
+                .colors(TAG_COLOR + "1", colorTooltip, colors[1].getColor(), Color.COLORS)
+                .colors(TAG_COLOR + "2", colorTooltip, colors[2].getColor(), Color.COLORS)
+                .colors(TAG_COLOR + "3", colorTooltip, colors[3].getColor(), Color.COLORS);
     }
 
     protected IEditorGui redstoneGui(IEditorGui gui) {

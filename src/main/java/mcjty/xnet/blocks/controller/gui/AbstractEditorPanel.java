@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public abstract class AbstractEditorPanel implements IEditorGui {
@@ -259,11 +260,13 @@ public abstract class AbstractEditorPanel implements IEditorGui {
     @Override
     public <T extends Enum<T>> IEditorGui choices(String tag, String tooltip, T current, T... values) {
         String[] strings = new String[values.length];
+        int currIndex = 0;
         int i = 0;
         for (T s : values) {
-            strings[i++] = StringUtils.capitalize(s.toString().toLowerCase());
+            if (s == current) currIndex = i;
+            strings[i++] = I18n.format(XNet.MODID + ".editor." + current.getClass().getSimpleName().toLowerCase(Locale.US) + "." + s.name().toLowerCase(Locale.US));
         }
-        return choices(tag, tooltip, StringUtils.capitalize(current.toString().toLowerCase()), strings);
+        return choices(tag, tooltip, strings[currIndex], strings);
     }
 
     @Override
@@ -271,16 +274,16 @@ public abstract class AbstractEditorPanel implements IEditorGui {
         int w = 14;
         fitWidth(w);
 
-        String ignored = I18n.format(XNet.MODID + ".controller.redstone.ignored");
-        String off = I18n.format(XNet.MODID + ".controller.redstone.off");
-        String on = I18n.format(XNet.MODID + ".controller.redstone.on");
-        String pulse = I18n.format(XNet.MODID + ".controller.redstone.pulse");
+        String ignored = I18n.format(XNet.MODID + ".editor.redstone.ignored");
+        String off = I18n.format(XNet.MODID + ".editor.redstone.off");
+        String on = I18n.format(XNet.MODID + ".editor.redstone.on");
+        String pulse = I18n.format(XNet.MODID + ".editor.redstone.pulse");
 
         ImageChoiceLabel redstoneMode = new ImageChoiceLabel(mc, gui)
-                .addChoice(ignored, I18n.format(XNet.MODID + ".controller.redstone.ignored.tooltip"), iconGuiElements, 1, 1)
-                .addChoice(off, I18n.format(XNet.MODID + ".controller.redstone.off.tooltip"), iconGuiElements, 17, 1)
-                .addChoice(on, I18n.format(XNet.MODID + ".controller.redstone.on.tooltip"), iconGuiElements, 33, 1)
-                .addChoice(pulse, I18n.format(XNet.MODID + ".controller.redstone.pulse.tooltip"), iconGuiElements, 49, 1);
+                .addChoice(ignored, I18n.format(XNet.MODID + ".editor.redstone.ignored.tooltip"), iconGuiElements, 1, 1)
+                .addChoice(off, I18n.format(XNet.MODID + ".editor.redstone.off.tooltip"), iconGuiElements, 17, 1)
+                .addChoice(on, I18n.format(XNet.MODID + ".editor.redstone.on.tooltip"), iconGuiElements, 33, 1)
+                .addChoice(pulse, I18n.format(XNet.MODID + ".editor.redstone.pulse.tooltip"), iconGuiElements, 49, 1);
 
         switch (current) {
             case IGNORED:

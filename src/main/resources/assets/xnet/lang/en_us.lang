@@ -96,20 +96,62 @@ xnet.controller.connector.block=§aBlock: §f%s
 xnet.controller.connector.position=§aPosition: §f%s
 xnet.controller.connector.message=§f(double-click to highlight)
 
+xnet.editor.enumfacingfacing.down=Down
+xnet.editor.enumfacingfacing.up=Up
+xnet.editor.enumfacingfacing.south=South
+xnet.editor.enumfacingfacing.north=North
+xnet.editor.enumfacingfacing.east=East
+xnet.editor.enumfacingfacing.west=West
+xnet.editor.enumfacingfacing.tooltip=Side from which to operate
+
+xnet.editor.min=Min
+xnet.editor.max=Max
+
+xnet.editor.rate=Rate
+
+xnet.energy.rate.ext.tooltip=Max energy extraction rate\n(limited to %i per tick)
+xnet.energy.rate.ins.tooltip=Max energy insertion rate\n(limited to %i per tick)
+
+xnet.fluid.rate.ext.tooltip=Fluid extraction rate\n(max %i mb)
+xnet.fluid.rate.ins.tooltip=Fluid insertion rate\n(max %i mb)
+
+xnet.editor.priority=Pri
+xnet.editor.priority.tooltip=Insertion priority
+
+xnet.editor.energymode.ins=Ins
+xnet.editor.energymode.ext=Ext
+xnet.editor.energymode.tooltip=Insert or extract mode
+
+xnet.editor.speed.tooltip=Number of ticks for each operation
+
+xnet.editor.fluidmode.ins=Ins
+xnet.editor.fluidmode.ext=Ext
+xnet.editor.fluidmode.tooltip=Insert or extract mode
+
+xnet.energy.minmax.ext.tooltip=Disable extraction if energy\nis too low
+xnet.energy.minmax.ins.tooltip=Disable insertion if energy\nis too high
+
+xnet.fluid.minmax.ext.tooltip=Keep this amount of\nfluid in tank
+xnet.fluid.minmax.ins.tooltip=Disable insertion if\nfluid level is too high
+
+xnet.editor.filter=Filter
+
+xnet.editor.redstone.ignore=Ignored
+xnet.editor.redstone.ignore.tooltip=Redstone Mode:\nIgnored
+xnet.editor.redstone.off=Off
+xnet.editor.redstone.off.tooltip=Redstone Mode:\nOff to activate
+xnet.editor.redstone.on=On
+xnet.editor.redstone.on.tooltip=Redstone Mode:\nOn to activate
+xnet.editor.redstone.pulse=Pulse
+xnet.editor.redstone.pulse.tooltip=Do one operation\non a pulse
+
 xnet.connector.name_panel=Name:
 xnet.connector.directions_panel=Directions:
 
 xnet.connector.name=name
 xnet.connector.name.tooltip=Set the name of this connector
 
-xnet.controller.redstone.ignore=Ignored
-xnet.controller.redstone.ignore.tooltip=Redstone Mode:\nIgnored
-xnet.controller.redstone.off=Off
-xnet.controller.redstone.off.tooltip=Redstone Mode:\nOff to activate
-xnet.controller.redstone.on=On
-xnet.controller.redstone.on.tooltip=Redstone Mode:\nOn to activate
-xnet.controller.redstone.pulse=Pulse
-xnet.controller.redstone.pulse.tooltip=Do one operation\non a pulse
+xnet.connector.color.tooltip=Enable on color
 
 xnet.router.position=Pos
 xnet.router.index=Index
