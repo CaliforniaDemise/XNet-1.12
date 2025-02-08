@@ -49,8 +49,11 @@ public final class ForestrySupport {
     private static final String[] FORESTRY_NAMES = { QUEEN_BEE, PRINCESS_BEE, DRONE_BEE, LARVAE_BEE, SAPLING, POLLEN,
 	    BUTTERFLY, SERUM, CATERPILLAR, COCOON };
 
+    private static Boolean isLoaded = null;
+
     public static boolean isLoaded() {
-	    return Loader.isModLoaded(ID);
+        if (isLoaded == null) isLoaded = Loader.isModLoaded(ID);
+        return isLoaded;
     }
 
     /**
