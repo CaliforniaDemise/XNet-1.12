@@ -545,13 +545,27 @@ public final class TileEntityController extends GenericEnergyReceiverTileEntity 
     }
 
     private void removeChannel(int channel) {
+        clearPublications(channel);
         channels[channel] = null;
         cachedConnectors[channel] = null;
         cachedRoutedConnectors[channel] = null;
         markAsDirty();
     }
 
+    /**
+     * Routers keep publications by controller position and channel slot. When the channel in a slot goes away or
+     * is replaced, the routers on this network forget its publication; otherwise the next channel in that slot
+     * would be published under the old name without anyone having published it.
+     */
+    private void clearPublications(int channel) {
+        if (world == null || networkId == null) {
+            return;
+        }
+        LogicTools.routers(world, networkId).forEach(router -> router.clearPublication(pos, channel));
+    }
+
     private void createChannel(int channel, String typeId) {
+        clearPublications(channel);
         IChannelType type = XNet.xNetApi.findType(typeId);
         channels[channel] = new ChannelInfo(type);
         markAsDirty();
@@ -853,8 +867,15 @@ public final class TileEntityController extends GenericEnergyReceiverTileEntity 
             }
             String typeId = root.get("type").getAsString();
             IChannelType type = XNet.xNetApi.findType(typeId);
+            String channelName = root.get("name").getAsString();
+            // Pasting a channel over itself (same name and type, e.g. copy, edit, paste back) keeps its publication;
+            // anything else is a different channel and must not inherit it
+            ChannelInfo replaced = channels[channel];
+            if (replaced == null || channelName.isEmpty() || !channelName.equals(replaced.getChannelName()) || !replaced.getType().equals(type)) {
+                clearPublications(channel);
+            }
             channels[channel] = new ChannelInfo(type);
-            channels[channel].setChannelName(root.get("name").getAsString());
+            channels[channel].setChannelName(channelName);
             channels[channel].getChannelSettings().readFromJson(root.get("channel").getAsJsonObject());
             channels[channel].setEnabled(false);
 
