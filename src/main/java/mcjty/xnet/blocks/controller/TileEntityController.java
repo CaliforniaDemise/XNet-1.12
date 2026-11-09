@@ -24,6 +24,7 @@ import mcjty.xnet.blocks.cables.ConnectorBlock;
 import mcjty.xnet.blocks.cables.ConnectorTileEntity;
 import mcjty.xnet.blocks.cables.NetCableSetup;
 import mcjty.xnet.blocks.controller.gui.GuiController;
+import mcjty.xnet.blocks.router.TileEntityRouter;
 import mcjty.xnet.clientinfo.ChannelClientInfo;
 import mcjty.xnet.clientinfo.ConnectedBlockClientInfo;
 import mcjty.xnet.clientinfo.ConnectorClientInfo;
@@ -135,25 +136,41 @@ public final class TileEntityController extends GenericEnergyReceiverTileEntity 
     @Nonnull
     public NetworkChecker getNetworkChecker() {
         if (networkChecker == null) {
-            networkChecker = new NetworkChecker();
-            networkChecker.add(networkId);
-            WorldBlob worldBlob = XNetBlobData.getBlobData(getWorld()).getWorldBlob(getWorld());
-            LogicTools.routers(getWorld(), networkId)
-                    .forEach(router -> {
-                        networkChecker.add(worldBlob.getNetworksAt(router.getPos()));
-                        // We're only interested in one network. The other router networks are all same topology
-                        NetworkId routerNetwork = worldBlob.getNetworkAt(router.getPos());
-                        if (routerNetwork != null) {
-                            LogicTools.routers(getWorld(), routerNetwork)
-                                    .filter(r -> router != r)
-                                    .forEach(r -> LogicTools.connectors(getWorld(), r.getPos())
-                                            .forEach(connectorPos -> networkChecker.add(worldBlob.getNetworkAt(connectorPos))));
-                        }
-                    });
-
-//            networkChecker.dump();
+            // A new checker starts dirty, so the next checkNetwork clears the caches (needed after a network id change).
+            networkChecker = buildNetworkChecker();
         }
         return networkChecker;
+    }
+
+    /**
+     * The networks whose changes can change this controller's connectors and routed connectors: its own network,
+     * the routing network of each of its routers, and the network of every connector on every router that
+     * routed connectors are collected from. Walks the same graph as {@link TileEntityRouter#addRoutedConnectors}.
+     */
+    private NetworkChecker buildNetworkChecker() {
+        NetworkChecker checker = new NetworkChecker();
+        checker.add(networkId);
+        World world = getWorld();
+        WorldBlob worldBlob = XNetBlobData.getBlobData(world).getWorldBlob(world);
+        LogicTools.routers(world, networkId).forEach(router -> {
+            checker.add(worldBlob.getNetworksAt(router.getPos()));
+            NetworkId routingNetwork = router.findRoutingNetwork();
+            if (routingNetwork == null) {
+                // Local only: the router merges the networks of the connectors around it
+                addConnectorNetworks(checker, worldBlob, router);
+            } else {
+                checker.add(routingNetwork);
+                LogicTools.consumers(world, routingNetwork)
+                        .forEach(consumerPos -> LogicTools.routers(world, consumerPos)
+                                .forEach(r -> addConnectorNetworks(checker, worldBlob, r)));
+            }
+        });
+        return checker;
+    }
+
+    private void addConnectorNetworks(NetworkChecker checker, WorldBlob worldBlob, TileEntityRouter router) {
+        LogicTools.connectors(getWorld(), router.getPos())
+                .forEach(connectorPos -> checker.add(worldBlob.getNetworkAt(connectorPos)));
     }
 
     @Override
@@ -185,6 +202,9 @@ public final class TileEntityController extends GenericEnergyReceiverTileEntity 
     private void checkNetwork(WorldBlob worldBlob) {
         if (networkId != null && getNetworkChecker().isDirtyAndMarkClean(worldBlob)) {
             cleanCaches();
+            // The topology may have changed too (routers or areas added or removed): watch the new set from now on.
+            networkChecker = buildNetworkChecker();
+            networkChecker.isDirtyAndMarkClean(worldBlob);
             return;
         }
 
