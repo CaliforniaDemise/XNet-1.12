@@ -540,6 +540,9 @@ public final class TileEntityController extends GenericEnergyReceiverTileEntity 
     }
 
     public void markAsDirty() {
+        // Clear our own caches now, not on our next tick: marking the network dirty makes other controllers
+        // watching it rebuild their routed connectors from our getConnectors(), possibly before we tick.
+        cleanCaches();
         networkDirty();
         markDirtyQuick();
     }
