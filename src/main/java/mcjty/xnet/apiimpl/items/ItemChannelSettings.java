@@ -322,14 +322,8 @@ public class ItemChannelSettings extends DefaultChannelSettings implements IChan
                                 continue;
                             }
                             toinsert = Math.min(toinsert, caninsert);
-                            stack = stack.copy();
-                            if (toinsert <= 0) {
-                                stack.setCount(0);
-                            } else {
-                                stack.setCount(toinsert);
-                            }
                         }
-                        remaining = RFToolsSupport.insertItem(te, stack, true);
+                        remaining = RFToolsSupport.insertItem(te, ItemHandlerHelper.copyStackWithSize(stack, toinsert), true);
                     } else {
                         IItemHandler handler = getItemHandlerAt(te, settings.getFacing());
                         if (handler != null) {
@@ -340,28 +334,14 @@ public class ItemChannelSettings extends DefaultChannelSettings implements IChan
                                     continue;
                                 }
                                 toinsert = Math.min(toinsert, caninsert);
-                                stack = stack.copy();
-                                if (toinsert <= 0) {
-                                    stack.setCount(0);
-                                } else {
-                                    stack.setCount(toinsert);
-                                }
                             }
-                            remaining = ItemHandlerHelper.insertItem(handler, stack, true);
+                            remaining = ItemHandlerHelper.insertItem(handler, ItemHandlerHelper.copyStackWithSize(stack, toinsert), true);
                         } else {
                             continue;
                         }
                     }
 
                     actuallyinserted = toinsert - remaining.getCount();
-                    if (count == null) {
-                        // If we are not using a count then we restore 'stack' here as that is what
-                        // we actually have to keep inserting until it is empty. If we are using a count
-                        // then we don't do this as we don't want to risk stack getting null (on 1.10.2)
-                        // from the insertItem() and then not being able to set stacksize a few lines
-                        // above this
-                        stack = remaining;
-                    }
                     if (actuallyinserted > 0) {
                         inserted.add(entry);
                         total -= actuallyinserted;
@@ -393,23 +373,9 @@ public class ItemChannelSettings extends DefaultChannelSettings implements IChan
                         continue;
                     }
                     toinsert = Math.min(toinsert, caninsert);
-                    stack = stack.copy();
-                    if (toinsert <= 0) {
-                        stack.setCount(0);
-                    } else {
-                        stack.setCount(toinsert);
-                    }
                 }
-                ItemStack remaining = RFToolsSupport.insertItem(te, stack, false);
+                ItemStack remaining = RFToolsSupport.insertItem(te, ItemHandlerHelper.copyStackWithSize(stack, toinsert), false);
                 int actuallyinserted = toinsert - remaining.getCount();
-                if (count == null) {
-                    // If we are not using a count then we restore 'stack' here as that is what
-                    // we actually have to keep inserting until it is empty. If we are using a count
-                    // then we don't do this as we don't want to risk stack getting null (on 1.10.2)
-                    // from the insertItem() and then not being able to set stacksize a few lines
-                    // above this
-                    stack = remaining;
-                }
 
                 if (actuallyinserted > 0) {
                     roundRobinOffset = (roundRobinOffset + 1) % itemConsumers.size();
@@ -431,23 +397,9 @@ public class ItemChannelSettings extends DefaultChannelSettings implements IChan
                         continue;
                     }
                     toinsert = Math.min(toinsert, caninsert);
-                    stack = stack.copy();
-                    if (toinsert <= 0) {
-                        stack.setCount(0);
-                    } else {
-                        stack.setCount(toinsert);
-                    }
                 }
-                ItemStack remaining = ItemHandlerHelper.insertItem(handler, stack, false);
+                ItemStack remaining = ItemHandlerHelper.insertItem(handler, ItemHandlerHelper.copyStackWithSize(stack, toinsert), false);
                 int actuallyinserted = toinsert - remaining.getCount();
-                if (count == null) {
-                    // If we are not using a count then we restore 'stack' here as that is what
-                    // we actually have to keep inserting until it is empty. If we are using a count
-                    // then we don't do this as we don't want to risk stack getting null (on 1.10.2)
-                    // from the insertItem() and then not being able to set stacksize a few lines
-                    // above this
-                    stack = remaining;
-                }
 
                 if (actuallyinserted > 0) {
                     roundRobinOffset = (roundRobinOffset + 1) % itemConsumers.size();
