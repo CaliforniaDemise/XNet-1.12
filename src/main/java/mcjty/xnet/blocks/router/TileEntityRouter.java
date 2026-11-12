@@ -262,7 +262,9 @@ public final class TileEntityRouter extends GenericTileEntity {
                 .forEach(controller -> {
                     for (int i = 0; i < MAX_CHANNELS; i++) {
                         ChannelInfo info = controller.getChannels()[i];
-                        if (info != null) {
+                        // A channel without a name can't be published (the router GUI doesn't list it, so a
+                        // publication it inherited could never be undone); same rule as getRoutedConnectors.
+                        if (info != null && !info.getChannelName().isEmpty()) {
                             String publishedName = publishedChannels.get(new LocalChannelId(controller.getPos(), i));
                             if (publishedName != null && !publishedName.isEmpty()) {
                                 if (channelName.equals(publishedName) && type.equals(info.getType())) {
@@ -274,6 +276,16 @@ public final class TileEntityRouter extends GenericTileEntity {
                     }
                 });
         return rc.get();
+    }
+
+    /**
+     * Forgets the publication of a controller's channel slot, if there is one. Called by the controller when the
+     * channel in that slot is removed or replaced, so a new channel in the slot doesn't inherit it.
+     */
+    public void clearPublication(@Nonnull BlockPos controllerPos, int channel) {
+        if (publishedChannels.containsKey(new LocalChannelId(controllerPos, channel))) {
+            updatePublishName(controllerPos, channel, "");
+        }
     }
 
     private void updatePublishName(@Nonnull BlockPos controllerPos, int channel, String name) {

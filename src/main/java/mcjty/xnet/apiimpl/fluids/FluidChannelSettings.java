@@ -29,8 +29,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class FluidChannelSettings extends DefaultChannelSettings implements IChannelSettings {
 
@@ -288,6 +290,10 @@ public class FluidChannelSettings extends DefaultChannelSettings implements ICha
         if (fluidExtractors == null) {
             fluidExtractors = new HashMap<>();
             fluidConsumers = new ArrayList<>();
+            // One entry per connector side. The routers also hand back this controller's own connectors
+            // on a published channel, so a local insert would otherwise be listed twice and the
+            // simulation would credit its room twice.
+            Set<SidedConsumer> consumerSides = new HashSet<>();
             Map<SidedConsumer, IConnectorSettings> connectors = context.getConnectors(channel);
             for (Map.Entry<SidedConsumer, IConnectorSettings> entry : connectors.entrySet()) {
                 FluidConnectorSettings con = (FluidConnectorSettings) entry.getValue();
@@ -295,13 +301,14 @@ public class FluidChannelSettings extends DefaultChannelSettings implements ICha
                     fluidExtractors.put(entry.getKey(), con);
                 } else {
                     fluidConsumers.add(Pair.of(entry.getKey(), con));
+                    consumerSides.add(entry.getKey());
                 }
             }
 
             connectors = context.getRoutedConnectors(channel);
             for (Map.Entry<SidedConsumer, IConnectorSettings> entry : connectors.entrySet()) {
                 FluidConnectorSettings con = (FluidConnectorSettings) entry.getValue();
-                if (con.getFluidMode() == FluidConnectorSettings.FluidMode.INS) {
+                if (con.getFluidMode() == FluidConnectorSettings.FluidMode.INS && consumerSides.add(entry.getKey())) {
                     fluidConsumers.add(Pair.of(entry.getKey(), con));
                 }
             }
